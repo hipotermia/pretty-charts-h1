@@ -1,1 +1,1 @@
-# pretty-charts-h1
+Limit 1000 submissions.
