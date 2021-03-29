@@ -13,7 +13,7 @@ def hipotermia():
 		csrf = r.json()['csrf_token']
 		profile_pic = r.json()['profile_picture_urls']['medium']
 
-		r = requests.post('https://hackerone.com/bugs.json?limit=1000', cookies={'__Host-session': cookie}, headers={'x-csrf-token': csrf})
+		r = requests.post('https://hackerone.com/bugs.json?limit=1000&subject=user', cookies={'__Host-session': cookie}, headers={'x-csrf-token': csrf})
 		bugs = r.json()['bugs']
 	except:
 		return 'Invalid cookie'
@@ -220,7 +220,7 @@ def bounty_detail_data():
 		csrf = r.json()['csrf_token']
 		username = r.json()['username']
 
-		r = requests.post('https://hackerone.com/bugs.json?limit=1000', cookies={'__Host-session': cookie}, headers={'x-csrf-token': csrf})
+		r = requests.post('https://hackerone.com/bugs.json?limit=1000&subject=user', cookies={'__Host-session': cookie}, headers={'x-csrf-token': csrf})
 		bugs = r.json()['bugs']
 	except:
 		return 'Invalid cookie'
