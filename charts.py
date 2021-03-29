@@ -232,7 +232,10 @@ def bounty_detail_data():
 
 		detail = requests.get('https://hackerone.com/reports/' + str(id) + '.json', cookies={'__Host-session': cookie}).json()
 		try:
-			severity = bug['severity_rating']
+			if 'severity_rating' in bug:
+				severity = bug['severity_rating']
+			else:
+				severity = 'not set'
 			for activity in detail['activities']:
 				if activity['type'] == 'Activities::BountyAwarded' and activity['collaborator']['username'] == username:
 					if severity not in severities:
