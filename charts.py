@@ -232,15 +232,22 @@ def bounty_detail_data():
 		severity = bug['severity_rating']
 
 		detail = requests.get('https://hackerone.com/reports/' + str(id) + '.json', cookies={'__Host-session': cookie}).json()
+		try:
+			for activity in detail['activities']:
+				if activity['type'] == 'Activities::BountyAwarded' and activity['collaborator']['username'] == username:
+					if severity not in severities:
+						severities[severity] = {'n': 0, 'bounties': 0}
 
-		for activity in detail['activities']:
-			if activity['type'] == 'Activities::BountyAwarded' and activity['collaborator']['username'] == username:
-				if severity not in severities:
-					severities[severity] = {'n': 0, 'bounties': 0}
-				severities[severity]['bounties'] += float(activity['bounty_amount']) + float(activity['bonus_amount'])
-				count = True
-		if count:
-			severities[severity]['n'] += 1
+					if 'bounty_amount' in activity:
+						severities[severity]['bounties'] += float(activity['bounty_amount'])
+					if 'bonus_amount' in activity:
+						severities[severity]['bounties'] += float(activity['bonus_amount'])
+
+					count = True
+			if count:
+				severities[severity]['n'] += 1
+		except:
+			print('Error with report ' + str(id))
 
 		print('[' + str(i) + '/' + str(len(bugs)) + ']', severities)
 	return jsonify(severities)
